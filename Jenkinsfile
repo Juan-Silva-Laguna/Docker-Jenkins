@@ -1,8 +1,12 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.11'
+        }
+    }
 
     stages {
-        stage('Clonar repositorio') {
+        stage('Checkout') {
             steps {
                 git 'https://github.com/Juan-Silva-Laguna/Docker-Jenkins.git'
             }
@@ -10,8 +14,7 @@ pipeline {
 
         stage('Instalar dependencias') {
             steps {
-                sh 'apt-get update && apt-get install -y python3 python3-pip'
-                sh 'pip3 install pytest'
+                sh 'pip install pytest'
             }
         }
 
@@ -27,7 +30,7 @@ pipeline {
             echo '✅ Tests pasaron. Listo para CD.'
         }
         failure {
-            echo '❌ Tests fallaron. Revisa errores antes de pasar a producción.'
+            echo '❌ Tests fallaron. Revisa el error.'
         }
     }
 }
