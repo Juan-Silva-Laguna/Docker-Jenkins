@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11'
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
@@ -14,13 +10,13 @@ pipeline {
 
         stage('Instalar dependencias') {
             steps {
-                sh 'pip install pytest'
+                sh 'pip3 install --user pytest'
             }
         }
 
         stage('Ejecutar tests') {
             steps {
-                sh 'pytest funcion/test_puntaje.py'
+                sh '~/.local/bin/pytest funcion/test_puntaje.py'
             }
         }
     }
