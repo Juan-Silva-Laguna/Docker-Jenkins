@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        VENV_DIR = '.venv'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -8,15 +12,17 @@ pipeline {
             }
         }
 
-        stage('Instalar dependencias') {
+        stage('Crear entorno virtual') {
             steps {
-                sh 'pip3 install --user pytest'
+                sh 'python3 -m venv $VENV_DIR'
+                sh './$VENV_DIR/bin/pip install --upgrade pip'
+                sh './$VENV_DIR/bin/pip install pytest'
             }
         }
 
         stage('Ejecutar tests') {
             steps {
-                sh '~/.local/bin/pytest funcion/test_puntaje.py'
+                sh './$VENV_DIR/bin/pytest funcion/test_puntaje.py'
             }
         }
     }
